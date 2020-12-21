@@ -1,0 +1,60 @@
+<style>
+    .mapboxgl-ctrl-geocoder {
+        width: 95% !important;
+        font-size: inherit !important;
+        min-width: initial !important;
+        box-shadow: none !important;
+    }
+</style>
+<div communitybox-search-bar directory="09a6b2d6-499c-475a-8e29-3a97908c7eb5"
+    style="background-color: white; border-radius: 10px; display: flex; flex-wrap: wrap;padding-left: 20px; padding-bottom: 17px; padding-right: 20px; width: 100%; justify-content:center;">
+  <div style="display: flex; flex-wrap: wrap;">
+    <div  id="cb-dt-location-input" cb-filter-field="location" placeholder="enter location"
+        style="border: 1px solid #cccccc; border-radius: 7px; margin: 17px 10px 0px 0px; padding: 5px 0px 5px 7px; width: 237px;">
+    </div>
+
+    <button id="search-providers-btn" class="sqs-block-button-element--medium sqs-block-button-element" cb-launch-filter
+        style="border: none; outline: 0; border-radius: 7px;padding-left: 17px; padding-right: 17px;padding-top: 7px; padding-bottom: 5px;margin-top: 17px;">Find Mental Health Support</button>
+</div>
+    <script>
+        let location_term = undefined;
+        function init_gc() {
+            if (typeof mapboxgl === "undefined") {
+                window.setTimeout(function () { init_gc() }, 500)
+                return
+            }
+            const g_geocoder = new MapboxGeocoder({ accessToken: g_mbk, types: 'country,region,place,postcode,locality,neighborhood', placeholder: 'search location' });
+          console.log(g_geocoder);
+            g_geocoder.addTo('#cb-dt-location-input');
+            g_geocoder.on("result", (res) => {
+                location_term = { lng: res.result.center[0], lat: res.result.center[1] }
+            })
+        };
+
+        init_gc();
+        document.querySelector("button[cb-launch-filter]").addEventListener("click", function () {
+            // const free_text_elem = document.querySelector(`[cb-filter-field="free-text"]`);
+            // const free_text_term = free_text_elem.value;
+            // let dropdown_terms = [];
+            // const dropdowns = document.querySelectorAll("[cbeb-detached-category-search]");
+            // for (let idx = 0; idx < dropdowns.length; idx++) {
+            //     const elem = dropdowns[idx]; if (elem.value.length > 0 && elem.value !== "default") {
+            //         dropdown_terms.push(elem.value)
+            //     }
+            // }
+            let search_params = [];
+            // if (dropdown_terms.length > 0) {
+            //     search_params.push(`tags=${dropdown_terms.join(',')}`);
+            // } if (free_text_term.length > 0) {
+            //     search_params.push(`free_text=${free_text_term}`);
+            // } 
+            if (location_term !== undefined) {
+                search_params.push(`lng=${location_term.lng}`);
+                search_params.push(`lat=${location_term.lat}`);
+            }
+          	search_params.push('radius=50');
+            window.location.href = `https://therootedbridge.com/search-providers${search_params.length > 0 ? `?${search_params.join('&')}` : ""}`
+        })
+    </script>
+
+</div>
