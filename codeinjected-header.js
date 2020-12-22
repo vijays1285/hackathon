@@ -63,8 +63,8 @@ function loadCustomRB() {
 };
 
 addEventListener('load', (event) => {
-    //console.log('The DOM is fully loaded.');
-    //waitForDivLoad({ triesLeft: 10 })
+    console.log('The DOM is fully loaded.');
+    waitForDivLoad({ triesLeft: 10 })
 });
 
 function removeElementFromDom(param) {
